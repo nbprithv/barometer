@@ -38,6 +38,16 @@
                ReferencedContainer = "container:Barometer.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "96DCB5A1198C2DD5004B8347"
+               BuildableName = "SDWebImageTests.xctest"
+               BlueprintName = "SDWebImageTests"
+               ReferencedContainer = "container:Barometer.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

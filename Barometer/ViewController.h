@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIImageView+WebCache.h"
+#import "LocationList.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <UITableViewDataSource, NSURLConnectionDelegate> {
+
+    NSString *response;
+    NSString *getPlacesAPI;
+
+}
 
 @end
