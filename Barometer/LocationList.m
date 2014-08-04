@@ -30,6 +30,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"asdadadsada");
     [self getPlaces];
 
     // Uncomment the following line to preserve selection between presentations.
@@ -50,14 +51,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     return placesArr.count;
 }
@@ -66,14 +65,10 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     
-    
-    
     NSURL *imageURL = [NSURL URLWithString:[placesArr[indexPath.row] valueForKey:@"icon"]];
     NSData *imageData = [NSData dataWithContentsOfURL:imageURL];
     UIImage *image = [UIImage imageWithData:imageData];
     [cell.imageView setImage:image];
-    
-    
     
     cell.textLabel.text = [placesArr[indexPath.row] valueForKey:@"name"];
     cell.detailTextLabel.text = @"M 50%, F 50%";
@@ -148,16 +143,26 @@
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
 // In a story board-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     // Get the new view controller using [segue destinationViewController].
+    LocationDetails *locationDetails = [segue destinationViewController];
+    
     // Pass the selected object to the new view controller.
-}
+    NSIndexPath *path = [self.tableView indexPathForSelectedRow];
+    Location *currentLoc = [[Location alloc] init];
 
- */
+    currentLoc.name = [placesArr[path.row] valueForKey:@"name"];
+    currentLoc.address = [placesArr[path.row] valueForKey:@"address"];
+    currentLoc.longitude = [placesArr[path.row] valueForKey:@"longitude"];
+    currentLoc.latitude = [placesArr[path.row] valueForKey:@"latitude"];
+    currentLoc.icon = [placesArr[path.row] valueForKey:@"icon"];
+
+    [locationDetails setCurrentLocation:currentLoc];
+}
 
 @end

@@ -29,6 +29,19 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    NSString *gMapsBaseURL = [NSString stringWithFormat:@"http://maps.googleapis.com/maps/api/staticmap?zoom=17&size=400x400&markers=color:blue|"];
+    
+    NSMutableString *imageURL = [NSMutableString string];
+    
+    [imageURL appendString:gMapsBaseURL];
+    [imageURL appendString: self.currentLocation.address];
+    NSURL *mapUrl = [NSURL URLWithString:[imageURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:mapUrl]];
+    
+    [self.LocationMap setImage:image];
+    NSLog(@"Google Maps URL %@", imageURL);
+    
 }
 
 - (void)didReceiveMemoryWarning

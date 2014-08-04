@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Location.h"
+#import "LocationDetails.h"
 
 @interface LocationList : UITableViewController {
 
