@@ -12,11 +12,13 @@
     NSMutableArray *locations;
     NSDictionary *placesList;
     NSArray *placesArr;
+    UIActivityIndicatorView *indicator;
 }
-
 @end
 
 @implementation LocationList
+
+
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -29,9 +31,21 @@
 
 - (void)viewDidLoad
 {
+    
+    indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    indicator.frame = CGRectMake(0.0, 0.0, 40.0, 40.0);
+    indicator.center = self.view.center;
+    [self.view addSubview:indicator];
+    [indicator bringSubviewToFront:self.view];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
+    
+    [indicator startAnimating];
+    
     [super viewDidLoad];
-    NSLog(@"asdadadsada");
-    [self getPlaces];
+    
+    [self getCurrentLoc];
+    
+    
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -68,20 +82,74 @@
     NSURL *imageURL = [NSURL URLWithString:[placesArr[indexPath.row] valueForKey:@"icon"]];
     NSData *imageData = [NSData dataWithContentsOfURL:imageURL];
     UIImage *image = [UIImage imageWithData:imageData];
-    [cell.imageView setImage:image];
+//    UIImageView *cellImage = (UIImageView *)[cell.imageView viewWithTag:8];
     
-    cell.textLabel.text = [placesArr[indexPath.row] valueForKey:@"name"];
-    cell.detailTextLabel.text = @"M 50%, F 50%";
+    UIImageView *cellImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15,10,75,75)];
+    cellImageView.tag = 8;
+    cellImageView.image = image;
+    [cell addSubview:cellImageView];
+    
+
+    
+    NSString *cellText = [placesArr[indexPath.row] valueForKey:@"name"];
+    NSString *cellDetailText = [NSString stringWithFormat:@"%@ mi",[placesArr[indexPath.row] valueForKey:@"distance_miles"]];
+    
+    NSString *cellAddressText = [placesArr[indexPath.row] valueForKey:@"address"];
+    
+    UILabel *locationName = (UILabel *)[cell.contentView viewWithTag:10];
+    UILabel *locationDistance = (UILabel *)[cell.contentView viewWithTag:12];
+    UILabel *locationAddress = (UILabel *)[cell.contentView viewWithTag:14];
+    [locationName setText:cellText];
+    [locationDistance setText:cellDetailText];
+    [locationAddress setText:cellAddressText];
+    
     return cell;
 }
 
-- (void) getPlaces {
-    getPlacesAPI = [NSString stringWithFormat:@"http://localhost:8888/places.json"];
+- (void) getCurrentLoc {
+    locationManager = [[CLLocationManager alloc] init];
+
+    locationManager.delegate = self;
+    locationManager.distanceFilter = kCLDistanceFilterNone;
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [locationManager startUpdatingLocation];
+}
+
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"There was an error retrieving your location" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    [errorAlert show];
+    NSLog(@"Error: %@",error.description);
+}
+
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locs {
+    CLLocation *crnLoc = [locs lastObject];
+    [self getPlaces:crnLoc];
+    [locationManager stopUpdatingLocation];
+}
+
+
+
+-(CLLocationDistance) getDistanceFromSource:(CLLocation *)locA destinationLoc:(CLLocation *)locB {
+    //CLLocation *locationA = [[CLLocation alloc] initWithLatitude:12.123456 longitude:12.123456];
+    //CLLocation *locationB = [[CLLocation alloc] initWithLatitude:21.654321 longitude:21.654321];
+    
+    CLLocationDistance distanceInMeters = [locA distanceFromLocation:locB];
+    return distanceInMeters;
+}
+
+
+- (void) getPlaces:(CLLocation*)currentLoc {
+
+    getPlacesAPI = [NSString stringWithFormat:@"http://localhost:3000/place?action=get_places&currlat=%.8f&currlong=%.8f",currentLoc.coordinate.latitude,currentLoc.coordinate.longitude];
     NSURL *urlObj = [NSURL URLWithString:getPlacesAPI];
     
+    
+    NSLog(@"Longitude: %.8f Latitude %.8f",currentLoc.coordinate.latitude, currentLoc.coordinate.longitude);
+    NSLog(@"%@", getPlacesAPI);
+    
+    [self getCurrentLoc];
     NSURLRequest *req = [NSURLRequest requestWithURL:urlObj];
     
-    //NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:urlObj];
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:req delegate:self];
     
     if (conn) {
@@ -98,8 +166,11 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     placesList = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
     placesArr = [placesList valueForKey:@"results"];
-    NSLog(@"array: %@",placesArr);
-    NSLog(@"aray size: %i", placesArr.count);
+    
+    //NSLog(@"array: %@",placesArr);
+    //NSLog(@"aray size: %i", placesArr.count);
+    
+    [indicator stopAnimating];
     [self.tableView reloadData];
 }
 

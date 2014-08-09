@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
 #import "Location.h"
 #import "LocationDetails.h"
 
-@interface LocationList : UITableViewController {
-
-NSString *response;
-NSString *getPlacesAPI;
-    
+@interface LocationList : UITableViewController <UIApplicationDelegate, CLLocationManagerDelegate> {
+    NSString *response;
+    NSString *getPlacesAPI;
+    CLLocationManager *locationManager;
 }
 
 @end

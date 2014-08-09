@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		962A0C651990696300DD3906 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 962A0C641990696300DD3906 /* CoreLocation.framework */; };
 		96DCB554198ACC33004B8347 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96DCB553198ACC33004B8347 /* Foundation.framework */; };
 		96DCB556198ACC33004B8347 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96DCB555198ACC33004B8347 /* CoreGraphics.framework */; };
 		96DCB558198ACC33004B8347 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96DCB557198ACC33004B8347 /* UIKit.framework */; };
@@ -124,6 +125,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		962A0C641990696300DD3906 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		96DCB550198ACC33004B8347 /* Barometer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Barometer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96DCB553198ACC33004B8347 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		96DCB555198ACC33004B8347 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -226,6 +228,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				962A0C651990696300DD3906 /* CoreLocation.framework in Frameworks */,
 				96DCB556198ACC33004B8347 /* CoreGraphics.framework in Frameworks */,
 				96DCB558198ACC33004B8347 /* UIKit.framework in Frameworks */,
 				96DCB554198ACC33004B8347 /* Foundation.framework in Frameworks */,
@@ -290,6 +293,7 @@
 		96DCB552198ACC33004B8347 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				962A0C641990696300DD3906 /* CoreLocation.framework */,
 				96DCB553198ACC33004B8347 /* Foundation.framework */,
 				96DCB555198ACC33004B8347 /* CoreGraphics.framework */,
 				96DCB557198ACC33004B8347 /* UIKit.framework */,
@@ -1098,6 +1102,7 @@
 				96DCB584198ACC33004B8347 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		96DCB585198ACC33004B8347 /* Build configuration list for PBXNativeTarget "BarometerTests" */ = {
 			isa = XCConfigurationList;
@@ -1106,6 +1111,7 @@
 				96DCB587198ACC33004B8347 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		96DCB5B1198C2DD5004B8347 /* Build configuration list for PBXNativeTarget "SDWebImage" */ = {
 			isa = XCConfigurationList;
@@ -1114,6 +1120,7 @@
 				96DCB5B3198C2DD5004B8347 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		96DCB5B4198C2DD5004B8347 /* Build configuration list for PBXNativeTarget "SDWebImageTests" */ = {
 			isa = XCConfigurationList;
@@ -1122,6 +1129,7 @@
 				96DCB5B6198C2DD5004B8347 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
