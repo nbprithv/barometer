@@ -18,8 +18,6 @@
 
 @implementation LocationList
 
-
-
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -122,21 +120,10 @@
 }
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locs {
-    CLLocation *crnLoc = [locs lastObject];
+    crnLoc = [locs lastObject];
     [self getPlaces:crnLoc];
     [locationManager stopUpdatingLocation];
 }
-
-
-
--(CLLocationDistance) getDistanceFromSource:(CLLocation *)locA destinationLoc:(CLLocation *)locB {
-    //CLLocation *locationA = [[CLLocation alloc] initWithLatitude:12.123456 longitude:12.123456];
-    //CLLocation *locationB = [[CLLocation alloc] initWithLatitude:21.654321 longitude:21.654321];
-    
-    CLLocationDistance distanceInMeters = [locA distanceFromLocation:locB];
-    return distanceInMeters;
-}
-
 
 - (void) getPlaces:(CLLocation*)currentLoc {
 
@@ -232,6 +219,7 @@
     currentLoc.longitude = [placesArr[path.row] valueForKey:@"longitude"];
     currentLoc.latitude = [placesArr[path.row] valueForKey:@"latitude"];
     currentLoc.icon = [placesArr[path.row] valueForKey:@"icon"];
+    currentLoc.userLocation = crnLoc;
 
     [locationDetails setCurrentLocation:currentLoc];
 }

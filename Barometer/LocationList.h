@@ -15,6 +15,7 @@
     NSString *response;
     NSString *getPlacesAPI;
     CLLocationManager *locationManager;
+    CLLocation *crnLoc;
 }
 
 @end

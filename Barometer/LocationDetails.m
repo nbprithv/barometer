@@ -10,9 +10,9 @@
 
 @interface LocationDetails ()
 @property (weak, nonatomic) IBOutlet UILabel *LocationInfo;
-@property (weak, nonatomic) IBOutlet UIImageView *LocationMap;
 @property (weak, nonatomic) IBOutlet UILabel *LocationInfoAddress;
 @property (weak, nonatomic) IBOutlet MKMapView *LocationDetailMap;
+@property (weak,nonatomic) CLLocation *currentUserLocation;
 
 @end
 
@@ -26,6 +26,12 @@
     }
     return self;
 }
+- (IBAction)LocationGetDirections:(id)sender {
+    NSString* addr = [NSString stringWithFormat:@"http://maps.apple.com/maps?daddr=%@&saddr=%1.6f,%1.6f",self.currentLocation.address,self.currentLocation.userLocation.coordinate.latitude, self.currentLocation.userLocation.coordinate.longitude];
+    NSURL* url = [[NSURL alloc] initWithString:[addr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    [[UIApplication sharedApplication] openURL:url];
+    
+}
 
 - (void)viewDidLoad
 {
@@ -33,7 +39,6 @@
 	// Do any additional setup after loading the view.
     
     NSString *gMapsBaseURL = [NSString stringWithFormat:@"http://maps.googleapis.com/maps/api/staticmap?zoom=17&size=400x400&markers=color:blue|"];
-
     
     NSMutableString *imageURL = [NSMutableString string];
     
@@ -41,6 +46,8 @@
     [imageURL appendString: self.currentLocation.address];
     //NSURL *mapUrl = [NSURL URLWithString:[imageURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     //UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:mapUrl]];
+    
+    NSLog(@"curent user location %.8f %.8f", self.currentLocation.userLocation.coordinate.latitude, self.currentLocation.userLocation.coordinate.longitude);
     
     
     NSString *location = self.currentLocation.address;
@@ -50,7 +57,6 @@
                      if (placemarks && placemarks.count > 0) {
                          CLPlacemark *topResult = [placemarks objectAtIndex:0];
                          MKPlacemark *placemark = [[MKPlacemark alloc] initWithPlacemark:topResult];
-                         
                          
                          CLLocationCoordinate2D noLocation;
                          MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(noLocation, 500, 500);
