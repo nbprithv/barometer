@@ -127,7 +127,7 @@
 
 - (void) getPlaces:(CLLocation*)currentLoc {
 
-    getPlacesAPI = [NSString stringWithFormat:@"http://localhost:3000/place?action=get_places&currlat=%.8f&currlong=%.8f",currentLoc.coordinate.latitude,currentLoc.coordinate.longitude];
+    getPlacesAPI = [NSString stringWithFormat:@"http://aqueous-caverns-8294.herokuapp.com/place?action=get_places&currlat=%.8f&currlong=%.8f",currentLoc.coordinate.latitude,currentLoc.coordinate.longitude];
     NSURL *urlObj = [NSURL URLWithString:getPlacesAPI];
     
     
