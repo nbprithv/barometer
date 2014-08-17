@@ -14,9 +14,15 @@
     NSArray *placesArr;
     UIActivityIndicatorView *indicator;
 }
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *getLocation;
 @end
 
 @implementation LocationList
+
+- (IBAction)getLocationUpdate:(id)sender {
+    [self getCurrentLoc];
+    
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -121,8 +127,16 @@
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locs {
     crnLoc = [locs lastObject];
+    
+    //Testing - Adding a alert window to show the lat, long
+
+    
+    
+    
     [self getPlaces:crnLoc];
+
     [locationManager stopUpdatingLocation];
+    [self getCurrAddress:crnLoc];
 }
 
 - (void) getPlaces:(CLLocation*)currentLoc {
@@ -146,6 +160,76 @@
     }
 }
 
+- (void) getCurrAddress:(CLLocation*)currentLoc {
+     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:currentLoc completionHandler:^(NSArray *placemarks, NSError *error) {
+        NSLog(@"Found placemarks: %@, error: %@", placemarks, error);
+        CLPlacemark *placemark = [placemarks objectAtIndex:0];
+        if (error == nil && [placemarks count] > 0)
+        {
+            placemark = [placemarks lastObject];
+            
+            // strAdd -> take bydefault value nil
+            NSString *strAdd = nil;
+            
+            if ([placemark.subThoroughfare length] != 0)
+                strAdd = placemark.subThoroughfare;
+            
+            if ([placemark.thoroughfare length] != 0)
+            {
+                // strAdd -> store value of current location
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark thoroughfare]];
+                else
+                {
+                    // strAdd -> store only this value,which is not null
+                    strAdd = placemark.thoroughfare;
+                }
+            }
+            
+            if ([placemark.postalCode length] != 0)
+            {
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark postalCode]];
+                else
+                    strAdd = placemark.postalCode;
+            }
+            
+            if ([placemark.locality length] != 0)
+            {
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark locality]];
+                else
+                    strAdd = placemark.locality;
+            }
+            
+            if ([placemark.administrativeArea length] != 0)
+            {
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark administrativeArea]];
+                else
+                    strAdd = placemark.administrativeArea;
+            }
+            
+            if ([placemark.country length] != 0)
+            {
+                if ([strAdd length] != 0)
+                    strAdd = [NSString stringWithFormat:@"%@, %@",strAdd,[placemark country]];
+                else
+                    strAdd = placemark.country;
+            }
+            NSString *alertMsg = [NSString stringWithFormat:@"Lat: %.8f Long: %.8f, Address: %@", currentLoc.coordinate.latitude, currentLoc.coordinate.longitude, strAdd];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Current Location"
+                                                            message:alertMsg
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        
+    }];
+}
+
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
     response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
@@ -159,6 +243,22 @@
     
     [indicator stopAnimating];
     [self.tableView reloadData];
+}
+
+- (void)startStandardUpdates
+{
+    if (nil == locationManager)
+        locationManager = [[CLLocationManager alloc] init];
+    
+    
+    
+    locationManager.delegate = self;
+    locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+    
+    // Set a movement threshold for new events.
+    locationManager.distanceFilter = 50; // meters
+    
+    [locationManager startUpdatingLocation];
 }
 
 
